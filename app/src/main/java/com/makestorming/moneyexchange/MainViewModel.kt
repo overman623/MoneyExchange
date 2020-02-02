@@ -1,6 +1,7 @@
 package com.makestorming.moneyexchange
 
 import android.app.Application
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -15,29 +16,23 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
     var after: MutableLiveData<String> = MutableLiveData()
     val text: ObservableField<String> = ObservableField()
 
-    private var beforeAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
+    private var mAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
         application,
         R.array.spinner, android.R.layout.simple_spinner_dropdown_item
     )
 
-    private var afterAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
-        application,
-        R.array.spinner, android.R.layout.simple_spinner_dropdown_item
-    )
-
-    fun getBeforeAdapter(): ArrayAdapter<CharSequence> {
-        return beforeAdapter
-    }
-
-    fun getAfterAdapter(): ArrayAdapter<CharSequence> {
-        return afterAdapter
+    fun getAdapter(): ArrayAdapter<CharSequence> {
+        return mAdapter
     }
 
     fun startExchange() {
         digit.value?.apply {
             val start = getEngString(before.value!!)
             val end = getEngString(after.value!!)
-            val task = JsoupAsyncTask(start, end, this)
+
+            Log.d("test", start + end + this)
+
+/*            val task = JsoupAsyncTask(start, end, this)
             task.execute().get()?.let {
                 it.select("span#ctl00_M_lblFromAmount") // <span id="ctl00_M_lblFromAmount">1.0000</span> //처음 입력한값
                 it.select("span#ctl00_M_lblFromIsoCode") // <span id="ctl00_M_lblFromIsoCode">KRW</span>
@@ -49,7 +44,7 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
                 it.select("span#ctl00_M_lblConversion2") // <span id="ctl00_M_lblConversion2">1 KRW = 0.006376 GTQ</span>
                 it.select("span#ctl00_M_lblInverseConvertion2") // <span id="ctl00_M_lblInverseConvertion2">1 GTQ = 156.83 KRW</span> //역환전 결과
                 text.set(it.toString())
-            }?:text.set("load failed")
+            }?:text.set("load failed")*/
         }
     }
 
@@ -64,13 +59,13 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
         view: View?,
         position: Int,
         id: Long
-    ) { //  스피너의 선택 내용이 바뀌면 호출된다
+    ) {
         when (parent.id) {
             R.id.spinnerBefore -> {
-                before.value = (beforeAdapter.getItem(position) as String)
+                before.value = (mAdapter.getItem(position) as String)
             }
             R.id.spinnerAfter -> {
-                after.value = (afterAdapter.getItem(position) as String)
+                after.value = (mAdapter.getItem(position) as String)
             }
         }
     }

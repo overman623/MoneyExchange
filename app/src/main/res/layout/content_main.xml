@@ -31,6 +31,7 @@
                 android:layout_width="250dp"
                 android:layout_height="60dp"
                 android:hint="input digit"
+                android:inputType="number"
                 android:text="@={viewModel.digit}"
                 />
 
@@ -53,7 +54,7 @@
                 android:layout_width="250dp"
                 android:layout_height="60dp"
                 android:theme="@style/SpinnerTheme"
-                android:setAdapter="@{viewModel.getBeforeAdapter()}"
+                android:setAdapter="@{viewModel.getAdapter()}"
                 android:onItemSelected="@{viewModel::onLanguageSpinnerItemSelected}"
                 />
 
@@ -75,7 +76,7 @@
                 android:layout_width="250dp"
                 android:layout_height="60dp"
                 android:theme="@style/SpinnerTheme"
-                android:setAdapter="@{viewModel.getAfterAdapter()}"
+                android:setAdapter="@{viewModel.getAdapter()}"
                 android:onItemSelected="@{viewModel::onLanguageSpinnerItemSelected}"
                 />
 
