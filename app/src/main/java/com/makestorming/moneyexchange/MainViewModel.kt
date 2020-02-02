@@ -13,7 +13,6 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
     var digit: MutableLiveData<String> = MutableLiveData()
     var before: MutableLiveData<String> = MutableLiveData()
     var after: MutableLiveData<String> = MutableLiveData()
-
     val text: ObservableField<String> = ObservableField()
 
     private var beforeAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
@@ -39,7 +38,18 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
             val start = getEngString(before.value!!)
             val end = getEngString(after.value!!)
             val task = JsoupAsyncTask(start, end, this)
-            text.set(task.execute().get()?.toString())
+            task.execute().get()?.let {
+                it.select("span#ctl00_M_lblFromAmount") // <span id="ctl00_M_lblFromAmount">1.0000</span> //처음 입력한값
+                it.select("span#ctl00_M_lblFromIsoCode") // <span id="ctl00_M_lblFromIsoCode">KRW</span>
+                it.select("span#ctl00_M_lblFromCurrencyName") // <span id="ctl00_M_lblFromCurrencyName">대한민국 원 (KRW)</span>
+                it.select("span#ctl00_M_lblConversion") // <span id="ctl00_M_lblConversion">1 KRW = 0.006376 GTQ</span> //결과 환전값
+                it.select("span#ctl00_M_lblToAmount") // <span id="ctl00_M_lblToAmount">0.006376</span> //환율
+                it.select("span#ctl00_M_lblToIsoCode") // <span id="ctl00_M_lblToIsoCode">GTQ</span>
+                it.select("span#ctl00_M_lblInverseConvertion") // <span id="ctl00_M_lblInverseConvertion">1 GTQ = 156.83 KRW</span> //역환전
+                it.select("span#ctl00_M_lblConversion2") // <span id="ctl00_M_lblConversion2">1 KRW = 0.006376 GTQ</span>
+                it.select("span#ctl00_M_lblInverseConvertion2") // <span id="ctl00_M_lblInverseConvertion2">1 GTQ = 156.83 KRW</span> //역환전 결과
+                text.set(it.toString())
+            }?:text.set("load failed")
         }
     }
 
@@ -65,49 +75,4 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
         }
     }
 
-
 }
-
-
-/*
-<div id="ctl00_M_pnlResult" rendertonothing="True">
-            <div class="col-xs-6 result-cur1">
-              <dl>
-                <dt>
-                  <strong>
-                   <span id="ctl00_M_lblFromAmount">1.0000</span>
-                   <span id="ctl00_M_lblFromIsoCode">KRW</span>
-                  </strong>
-                </dt>
-                <dd>
-                  <span id="ctl00_M_lblFromCurrencyName">대한민국 원 (KRW)</span>
-                </dd>
-              </dl>
-              <small class="conversion-wide-note">
-                <span id="ctl00_M_lblConversion">1 KRW = 0.006376 GTQ</span>
-              </small>
-              <b class="equal"></b>
-            </div>
-            <div class="col-xs-6 result-cur2">
-              <dl>
-                <dt>
-                  <strong>
-                    <span id="ctl00_M_lblToAmount">0.006376</span>
-                    <span id="ctl00_M_lblToIsoCode">GTQ</span>
-                  </strong>
-                </dt>
-                <dd>
-                  <span id="ctl00_M_lblToCurrencyName">과테말라 케트살 (GTQ)</span>
-                </dd>
-              </dl>
-              <small class="conversion-wide-note">
-                <span id="ctl00_M_lblInverseConvertion">1 GTQ = 156.83 KRW</span>
-              </small>
-
-              <small class="conversion-narrow-note hidden">
-                <span id="ctl00_M_lblConversion2">1 KRW = 0.006376 GTQ</span>
-                <span id="ctl00_M_lblInverseConvertion2">1 GTQ = 156.83 KRW</span>
-              </small>
-            </div>
-        </div>
-*/
