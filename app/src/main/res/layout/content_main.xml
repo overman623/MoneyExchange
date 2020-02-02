@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.makestorming.moneyexchange.MainViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".MainActivity"
+        tools:showIn="@layout/activity_main">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center">
+
+            <EditText
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:hint="input digit"
+                android:text="@={viewModel.digit}"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="from" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerBefore"
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:theme="@style/SpinnerTheme"
+                android:setAdapter="@{viewModel.getBeforeAdapter()}"
+                android:onItemSelected="@{viewModel::onLanguageSpinnerItemSelected}"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="to" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerAfter"
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:theme="@style/SpinnerTheme"
+                android:setAdapter="@{viewModel.getAfterAdapter()}"
+                android:onItemSelected="@{viewModel::onLanguageSpinnerItemSelected}"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:onClick="@{() -> viewModel.startExchange()}"
+            android:text="exchange" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textResult"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@{viewModel.text}"
+                />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</layout>
