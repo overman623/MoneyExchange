@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".MainActivity"
         tools:showIn="@layout/activity_main">
@@ -22,7 +21,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="center">
@@ -32,8 +32,7 @@
                 android:layout_height="60dp"
                 android:hint="input digit"
                 android:inputType="number"
-                android:text="@={viewModel.digit}"
-                />
+                android:text="@={viewModel.digit}" />
 
         </LinearLayout>
 
@@ -47,16 +46,16 @@
             <TextView
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="from" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinnerBefore"
                 android:layout_width="250dp"
                 android:layout_height="60dp"
-                android:theme="@style/SpinnerTheme"
-                android:setAdapter="@{viewModel.getAdapter()}"
                 android:onItemSelected="@{viewModel::onLanguageSpinnerItemSelected}"
-                />
+                android:setAdapter="@{viewModel.getAdapter()}"
+                android:theme="@style/SpinnerTheme" />
 
         </LinearLayout>
 
@@ -69,16 +68,16 @@
             <TextView
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="to" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinnerAfter"
                 android:layout_width="250dp"
                 android:layout_height="60dp"
-                android:theme="@style/SpinnerTheme"
-                android:setAdapter="@{viewModel.getAdapter()}"
                 android:onItemSelected="@{viewModel::onLanguageSpinnerItemSelected}"
-                />
+                android:setAdapter="@{viewModel.getAdapter()}"
+                android:theme="@style/SpinnerTheme" />
 
         </LinearLayout>
 
@@ -86,22 +85,76 @@
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
             android:onClick="@{() -> viewModel.startExchange()}"
             android:text="exchange" />
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            >
 
-            <TextView
-                android:id="@+id/textResult"
-                android:layout_width="match_parent"
-                android:layout_height="360dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@{viewModel.text}"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@{viewModel.fromText1}"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@{viewModel.fromText2}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@{viewModel.fromText3}" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_equal"
                 />
 
-        </FrameLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.toText1}"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.toText2}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.toText3}" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
