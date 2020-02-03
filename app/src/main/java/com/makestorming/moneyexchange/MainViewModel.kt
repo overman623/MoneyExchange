@@ -12,6 +12,7 @@ import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application) : AndroidViewModel(Application()) {
 
+    internal val toastMessage = SingleLiveEvent<ResourceString>()
     var digit: MutableLiveData<String> = MutableLiveData()
     var before: MutableLiveData<String> = MutableLiveData()
     var after: MutableLiveData<String> = MutableLiveData()
@@ -21,7 +22,7 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
     val toText1: ObservableField<String> = ObservableField()
     val toText2: ObservableField<String> = ObservableField()
     val toText3: ObservableField<String> = ObservableField()
-    var language: String = ""
+    private var language: String = ""
 
     private var mAdapter: ArrayAdapter<CharSequence>
 
@@ -80,7 +81,6 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
                 toText3.set(toCurrencyRate)
 
             } ?: run {
-                //                Toast.makeText(getApplication(), "load failed", Toast.LENGTH_SHORT).show()
                 fromText1.set(null)
                 fromText2.set(null)
                 fromText3.set(null)
@@ -91,6 +91,7 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
                 //toast
             }
         }
+        testToastWithResourceStringId()
     }
 
     private fun getEngString(value: String): String {
@@ -113,6 +114,19 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
                 after.value = (mAdapter.getItem(position) as String)
             }
         }
+    }
+
+    fun testToastWithResourceStringId() {
+        toastMessage.value = IdResourceString(R.string.hello)
+    }
+
+    fun testToastWithString() {
+        toastMessage.value = TextResourceString("Hello")
+    }
+
+    fun testToastWithResourceStringIdAndParameter() {
+        // Hello, %1$s! You have %2$d new messages.
+        toastMessage.value = FormatResourceString(R.string.hello_args, arrayOf("Desmond", 5))
     }
 
 }
