@@ -1,14 +1,18 @@
 package com.makestorming.moneyexchange
 
 import android.app.Application
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import java.util.*
-import java.util.concurrent.Executor
+import com.google.gson.JsonObject
+import com.makestorming.moneyexchange.data.GetDataHelper
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application) : AndroidViewModel(Application()) {
@@ -30,7 +34,19 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
     private lateinit var mAdapter: ArrayAdapter<CharSequence>
 
     init {
-        list.forEach {
+        val dataHelper = GetDataHelper()
+        dataHelper.setCallBack(object : Callback<JsonObject?> {
+            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
+            }
+
+            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+                Log.d("test", response.body().toString()) //test ok
+//                data.set(response.body()!!)
+//                view.setImage(response.body()?.getAsJsonArray("profile_images"))
+            }
+        })
+        dataHelper.start()
+        /*list.forEach {
             if (it == Locale.getDefault().language) {
                 language = Locale.getDefault().language + "."
                 return@forEach
@@ -45,7 +61,9 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
             mAdapter = ArrayAdapter(application, android.R.layout.simple_spinner_dropdown_item, languages)
         }?: run {
             testToastWithResourceStringId()
-        }
+        }*/
+        val languages:ArrayList<CharSequence> = ArrayList()
+        mAdapter = ArrayAdapter(application, android.R.layout.simple_spinner_dropdown_item, languages)
     }
 
     fun getAdapter(): ArrayAdapter<CharSequence> {

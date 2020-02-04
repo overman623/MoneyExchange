@@ -157,7 +157,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
                 xmlns:ads="http://schemas.android.com/apk/res-auto"
