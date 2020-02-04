@@ -14,6 +14,7 @@ import kotlin.collections.ArrayList
 class MainViewModel(application: Application) : AndroidViewModel(Application()) {
 
     internal val toastMessage = SingleLiveEvent<ResourceString>()
+    var adMob: MutableLiveData<Boolean> = MutableLiveData(false)
     var digit: MutableLiveData<String> = MutableLiveData()
     var before: MutableLiveData<String> = MutableLiveData()
     var after: MutableLiveData<String> = MutableLiveData()
@@ -23,7 +24,7 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
     val toText1: ObservableField<String> = ObservableField()
     val toText2: ObservableField<String> = ObservableField()
     val toText3: ObservableField<String> = ObservableField()
-    val image: ObservableField<Boolean> = ObservableField(false)
+    val load: ObservableField<Boolean> = ObservableField(false)
     var language: String = ""
 
     private lateinit var mAdapter: ArrayAdapter<CharSequence>
@@ -56,10 +57,10 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
             val start = getEngString(before.value!!)
             val end = getEngString(after.value!!)
 //            Log.d("test", start + end + this)
-
+            adMob.value = true
             val task = JsoupAsyncTask(language, start, end, this)
             task.execute().get()?.let {
-                image.set(true)
+                load.set(true)
                 val fromAmount = it.select("span#ctl00_M_lblFromAmount")
                     .text() // <span id="ctl00_M_lblFromAmount">1.0000</span> //처음 입력한값
                 val fromCode = it.select("span#ctl00_M_lblFromIsoCode")
