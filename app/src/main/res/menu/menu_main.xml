@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.makestorming.quicknote.MainActivity">
+    <item
+        android:id="@+id/action_todo"
+        android:title=""
+        android:icon="@android:drawable/stat_notify_sync"
+        app:showAsAction="always" />
+</menu>

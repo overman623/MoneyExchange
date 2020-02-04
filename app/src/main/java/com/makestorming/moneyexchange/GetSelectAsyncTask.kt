@@ -9,30 +9,20 @@ import java.io.IOException
 
 class GetSelectAsyncTask(
     private val language: String
-) : AsyncTask<Void, Void,  ArrayList<CharSequence>>() {
+) : AsyncTask<Void, Void,  Elements>() {
 
-    override fun doInBackground(vararg p0: Void?): ArrayList<CharSequence>? {
+    override fun doInBackground(vararg p0: Void?): Elements {
         val doc: Document
-        val array: ArrayList<CharSequence> = ArrayList()
+//        val array: ArrayList<CharSequence> = ArrayList()
+        val array = Elements()
         try {
-
-            doc =   Jsoup.connect("https://${language}exchange-rates.org")
+            doc = Jsoup.connect("https://${language}exchange-rates.org")
                     .header("User-Agent", "Mozilla/5.0").get()
-//            doc = Jsoup.connect("https://ko.exchange-rates.org").header("User-Agent", "Mozilla/5.0").get()
-
-
-            Log.d("TEST", doc.select("div#ctl00_M_pnlResult").toString()) //test ok
-//            Log.d("TEST", doc.select("select#currencyList").toString()) //test ok
-
-            doc.select("select#currencyList").text().split(")").forEach {
-                array.add("${it})")
-            }
-
-            return array
+            return doc.select("select#currencyList option")
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return null
+        return array
     }
 
 }

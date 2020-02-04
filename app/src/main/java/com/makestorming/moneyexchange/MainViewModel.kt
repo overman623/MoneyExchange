@@ -8,6 +8,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import java.util.*
+import java.util.concurrent.Executor
 import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application) : AndroidViewModel(Application()) {
@@ -22,24 +23,29 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
     val toText1: ObservableField<String> = ObservableField()
     val toText2: ObservableField<String> = ObservableField()
     val toText3: ObservableField<String> = ObservableField()
-    private var language: String = ""
+    val image: ObservableField<Boolean> = ObservableField(false)
+    var language: String = ""
 
-    private var mAdapter: ArrayAdapter<CharSequence>
+    private lateinit var mAdapter: ArrayAdapter<CharSequence>
 
     init {
-        val array: ArrayList<CharSequence>
-
         list.forEach {
-            if (it == Locale.getDefault().country.toLowerCase()) {
-                language = Locale.getDefault().country.toLowerCase() + "."
+            if (it == Locale.getDefault().language) {
+                language = Locale.getDefault().language + "."
                 return@forEach
             }
         }
+        val languages:ArrayList<CharSequence> = ArrayList()
         val task = GetSelectAsyncTask(language)
-        array = task.execute().get()
-        mAdapter = ArrayAdapter(application, android.R.layout.simple_spinner_item, array)
+        task.execute().get()?.let {
+            it.forEach{e ->
+                languages.add(e.text())
+            }
+            mAdapter = ArrayAdapter(application, android.R.layout.simple_spinner_dropdown_item, languages)
+        }?: run {
+            testToastWithResourceStringId()
+        }
     }
-
 
     fun getAdapter(): ArrayAdapter<CharSequence> {
         return mAdapter
@@ -53,7 +59,7 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
 
             val task = JsoupAsyncTask(language, start, end, this)
             task.execute().get()?.let {
-
+                image.set(true)
                 val fromAmount = it.select("span#ctl00_M_lblFromAmount")
                     .text() // <span id="ctl00_M_lblFromAmount">1.0000</span> //처음 입력한값
                 val fromCode = it.select("span#ctl00_M_lblFromIsoCode")
@@ -81,17 +87,10 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
                 toText3.set(toCurrencyRate)
 
             } ?: run {
-                fromText1.set(null)
-                fromText2.set(null)
-                fromText3.set(null)
-                toText1.set(null)
-                toText2.set(null)
-                toText3.set(null)
-//                text.set("load failed")
-                //toast
+                testToastWithResourceStringId()
             }
         }
-        testToastWithResourceStringId()
+
     }
 
     private fun getEngString(value: String): String {
@@ -117,7 +116,7 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
     }
 
     fun testToastWithResourceStringId() {
-        toastMessage.value = IdResourceString(R.string.hello)
+        toastMessage.value = IdResourceString(R.string.error)
     }
 
     fun testToastWithString() {

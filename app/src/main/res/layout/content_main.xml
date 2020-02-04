@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.makestorming.moneyexchange.MainViewModel" />
@@ -129,6 +129,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/ic_equal"
+                android:visibility="@{viewModel.image ? View.VISIBLE : View.INVISIBLE}"
                 />
 
             <LinearLayout
