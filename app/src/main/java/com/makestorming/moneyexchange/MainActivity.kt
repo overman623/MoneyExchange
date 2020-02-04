@@ -12,6 +12,8 @@ import com.makestorming.moneyexchange.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
+// http://exchangeratesapi.io/
+
 class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,6 @@ class MainActivity : AppCompatActivity(){
             if (res != null) {
                 val message = res.format(this@MainActivity)
                 Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
-                finish()
             }
         })
 

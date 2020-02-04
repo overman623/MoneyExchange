@@ -13,7 +13,6 @@ import com.makestorming.moneyexchange.data.GetDataHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application) : AndroidViewModel(Application()) {
 
@@ -29,87 +28,56 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
     val toText2: ObservableField<String> = ObservableField()
     val toText3: ObservableField<String> = ObservableField()
     val load: ObservableField<Boolean> = ObservableField(false)
-    var language: String = ""
 
-    private lateinit var mAdapter: ArrayAdapter<CharSequence>
+    private var mAdapter: ArrayAdapter<CharSequence> =
+        ArrayAdapter.createFromResource(
+            application,
+            R.array.spinner,
+            android.R.layout.simple_spinner_dropdown_item
+        )
 
-    init {
-        val dataHelper = GetDataHelper()
-        dataHelper.setCallBack(object : Callback<JsonObject?> {
-            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
-            }
-
-            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
-                Log.d("test", response.body().toString()) //test ok
-//                data.set(response.body()!!)
-//                view.setImage(response.body()?.getAsJsonArray("profile_images"))
-            }
-        })
-        dataHelper.start()
-        /*list.forEach {
-            if (it == Locale.getDefault().language) {
-                language = Locale.getDefault().language + "."
-                return@forEach
-            }
-        }
-        val languages:ArrayList<CharSequence> = ArrayList()
-        val task = GetSelectAsyncTask(language)
-        task.execute().get()?.let {
-            it.forEach{e ->
-                languages.add(e.text())
-            }
-            mAdapter = ArrayAdapter(application, android.R.layout.simple_spinner_dropdown_item, languages)
-        }?: run {
-            testToastWithResourceStringId()
-        }*/
-        val languages:ArrayList<CharSequence> = ArrayList()
-        mAdapter = ArrayAdapter(application, android.R.layout.simple_spinner_dropdown_item, languages)
-    }
 
     fun getAdapter(): ArrayAdapter<CharSequence> {
         return mAdapter
     }
 
     fun startExchange() {
+        if (digit.value?.toFloat()!! < 0) {
+            testToastWithResourceStringId2()
+            return
+        }
+
         digit.value?.apply {
             val start = getEngString(before.value!!)
             val end = getEngString(after.value!!)
-//            Log.d("test", start + end + this)
-            adMob.value = true
-            val task = JsoupAsyncTask(language, start, end, this)
-            task.execute().get()?.let {
-                load.set(true)
-                val fromAmount = it.select("span#ctl00_M_lblFromAmount")
-                    .text() // <span id="ctl00_M_lblFromAmount">1.0000</span> //처음 입력한값
-                val fromCode = it.select("span#ctl00_M_lblFromIsoCode")
-                    .text() // <span id="ctl00_M_lblFromIsoCode">KRW</span>
-                fromText1.set("$fromAmount $fromCode")
+            Log.d("test", start + end) //test ok
+            val dataHelper = GetDataHelper(start, end)
+            dataHelper.setCallBack(object : Callback<JsonObject?> {
+                override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
+                    testToastWithResourceStringId()
+                }
 
-                val fromCurrencyName = it.select("span#ctl00_M_lblFromCurrencyName")
-                    .text() // <span id="ctl00_M_lblFromCurrencyName">대한민국 원 (KRW)</span>
-                fromText2.set(fromCurrencyName)
-                val fromCurrencyRate = it.select("span#ctl00_M_lblConversion")
-                    .text() // <span id="ctl00_M_lblConversion">1 KRW = 0.006376 GTQ</span> //결과 환전값
-                fromText3.set(fromCurrencyRate)
+                override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+                    load.set(true)
+                    response.body()?.getAsJsonObject("rates")?.let {
+                        val from = it.getAsJsonPrimitive(start)
+                        val to = it.getAsJsonPrimitive(end)
+                        val result = (to.asFloat * digit.value!!.toFloat()) / from.asFloat
 
-                val toAmount = it.select("span#ctl00_M_lblToAmount")
-                    .text() // <span id="ctl00_M_lblToAmount">0.006376</span> //나온 액수
-                val toCode = it.select("span#ctl00_M_lblToIsoCode")
-                    .text() // <span id="ctl00_M_lblToIsoCode">GTQ</span>
-                toText1.set("$toAmount $toCode")
+                        fromText1.set(before.value!!)
+                        fromText2.set(digit.value!!)
+                        fromText3.set("${1} : ${String.format("%,.4f", to.asFloat / from.asFloat)}")
 
-                val toCurrencyName = it.select("span#ctl00_M_lblToCurrencyName")
-                    .text() // <span id="ctl00_M_lblToCurrencyName">대한민국 원 (KRW)</span>
-                toText2.set(toCurrencyName)
-                val toCurrencyRate = it.select("span#ctl00_M_lblInverseConvertion")
-                    .text() // <span id="ctl00_M_lblInverseConvertion">1 GTQ = 156.83 KRW</span> //역환전
-                toText3.set(toCurrencyRate)
+                        toText1.set(after.value!!)
+                        toText2.set("$result")
+                        toText3.set("${1} : ${String.format("%,.4f", from.asFloat / to.asFloat)}")
 
-            } ?: run {
-                testToastWithResourceStringId()
-            }
+                    }
+
+                }
+            })
+            dataHelper.start()
         }
-
     }
 
     private fun getEngString(value: String): String {
@@ -136,6 +104,10 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
 
     fun testToastWithResourceStringId() {
         toastMessage.value = IdResourceString(R.string.error)
+    }
+
+    fun testToastWithResourceStringId2() {
+        toastMessage.value = IdResourceString(R.string.minus)
     }
 
     fun testToastWithString() {

@@ -5,7 +5,7 @@ import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class GetDataHelper {
+class GetDataHelper(val start: String, val end: String) {
 
     lateinit var callback: Callback<JsonObject?>
 
@@ -24,7 +24,7 @@ class GetDataHelper {
     private val service = retrofit.create(GetJsonData::class.java)
 
     fun start() {
-        val request = service.callData("USD,GBP")
+        val request = service.callData("${start},${end}")
         request?.enqueue(callback)
     }
 
