@@ -1,12 +1,9 @@
 package com.makestorming.moneyexchange
 
 import android.app.Application
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -19,7 +16,6 @@ import retrofit2.Response
 class MainViewModel(application: Application) : AndroidViewModel(Application()) {
 
     internal val toastMessage = SingleLiveEvent<ResourceString>()
-    var adMob: MutableLiveData<Boolean> = MutableLiveData(false)
     var digit: MutableLiveData<String> = MutableLiveData("1")
     var before: MutableLiveData<String> = MutableLiveData()
     var after: MutableLiveData<String> = MutableLiveData()
