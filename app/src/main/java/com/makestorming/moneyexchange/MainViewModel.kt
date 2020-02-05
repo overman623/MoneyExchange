@@ -1,10 +1,12 @@
 package com.makestorming.moneyexchange
 
 import android.app.Application
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -18,7 +20,7 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
 
     internal val toastMessage = SingleLiveEvent<ResourceString>()
     var adMob: MutableLiveData<Boolean> = MutableLiveData(false)
-    var digit: MutableLiveData<String> = MutableLiveData()
+    var digit: MutableLiveData<String> = MutableLiveData("1")
     var before: MutableLiveData<String> = MutableLiveData()
     var after: MutableLiveData<String> = MutableLiveData()
     val fromText1: ObservableField<String> = ObservableField()
@@ -33,15 +35,23 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
         ArrayAdapter.createFromResource(
             application,
             R.array.spinner,
-            android.R.layout.simple_spinner_dropdown_item
+            R.layout.spinner_item
         )
 
+    init {
+        mAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+    }
 
     fun getAdapter(): ArrayAdapter<CharSequence> {
         return mAdapter
     }
 
     fun startExchange() {
+        if(digit.value.isNullOrBlank()){
+            testToastWithResourceStringId2()
+            return
+        }
+
         if (digit.value?.toFloat()!! < 0) {
             testToastWithResourceStringId2()
             return
@@ -50,7 +60,7 @@ class MainViewModel(application: Application) : AndroidViewModel(Application()) 
         digit.value?.apply {
             val start = getEngString(before.value!!)
             val end = getEngString(after.value!!)
-            Log.d("test", start + end) //test ok
+
             val dataHelper = GetDataHelper(start, end)
             dataHelper.setCallBack(object : Callback<JsonObject?> {
                 override fun onFailure(call: Call<JsonObject?>, t: Throwable) {

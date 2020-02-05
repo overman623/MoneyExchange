@@ -34,7 +34,10 @@
                     android:layout_width="250dp"
                     android:layout_height="60dp"
                     android:hint="input digit"
+                    android:gravity="center_horizontal"
                     android:inputType="numberDecimal"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
                     android:text="@={viewModel.digit}" />
 
             </LinearLayout>
@@ -50,6 +53,7 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:textColor="@color/white"
                     android:text="from" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
@@ -58,7 +62,8 @@
                     android:layout_height="60dp"
                     android:onItemSelected="@{viewModel::onLanguageSpinnerItemSelected}"
                     android:setAdapter="@{viewModel.getAdapter()}"
-                    android:theme="@style/SpinnerTheme" />
+                    android:theme="@style/SpinnerTheme"
+                     />
 
             </LinearLayout>
 
@@ -72,6 +77,7 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:textColor="@color/white"
                     android:text="to" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
@@ -111,6 +117,7 @@
                         android:layout_gravity="end"
                         android:gravity="end"
                         android:lines="2"
+                        android:textColor="@color/white"
                         android:text="@{viewModel.fromText1}"
                         android:textSize="15sp" />
 
@@ -119,12 +126,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:textSize="25sp"
+                        android:textColor="@color/white"
                         android:text="@{viewModel.fromText2}" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
+                        android:textColor="@color/white"
                         android:text="@{viewModel.fromText3}" />
 
                 </LinearLayout>
@@ -145,6 +154,7 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:lines="2"
+                        android:textColor="@color/white"
                         android:text="@{viewModel.toText1}"
                         android:textSize="15sp" />
 
@@ -152,11 +162,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="25sp"
+                        android:textColor="@color/white"
                         android:text="@{viewModel.toText2}" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:text="@{viewModel.toText3}" />
 
                 </LinearLayout>
