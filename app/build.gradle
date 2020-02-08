@@ -31,6 +31,24 @@ android {
         targetCompatibility = "8"
         sourceCompatibility = "8"
     }
+    buildTypes {
+
+        debug {
+            minifyEnabled true
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            proguardFile 'proguard-common.pro'
+            proguardFile 'proguard-glide.pro'
+            proguardFile 'proguard-retrofit2.pro'
+        }
+
+        release {
+            minifyEnabled true
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            proguardFile 'proguard-common.pro'
+            proguardFile 'proguard-glide.pro'
+            proguardFile 'proguard-retrofit2.pro'
+        }
+    }
 }
 
 dependencies {
